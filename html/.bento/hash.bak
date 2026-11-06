@@ -1,0 +1,25 @@
+Version=59
+LANGUAGE=EN
+Folders=2
+Pages=16
+UIXlate=False, DebugUIXlate=False, Language=EN
+
+Architecture.adoc • Architecture & Data Flow
+Assemblies.adoc • Assemblies & Collective Orders
+contents.txt • 262306.062348
+FieldMapping.adoc • Field Mapping (Spreadsheet Mapping)
+Index.adoc • PPS Interface — Technical Manual
+Introduction.adoc • Introduction
+JobExport.adoc • Job Export
+manifest.txt • 261506.061525
+MaterialImport.adoc • Material / Stock Import
+OrderImport.adoc • Production Order Import
+OrderUpdate.adoc • Order Update & Cancellation
+ProductionPackage.adoc • Production Package
+Workflow.adoc • End-to-End Workflow
+Appendix\Codes.adoc • Codes
+Appendix\contents.txt • 261506.061525
+Appendix\FieldReference.adoc • Field Reference
+Appendix\Glossary.adoc • Glossary
+Appendix\Index.adoc • Appendix
+Appendix\Settings.adoc • Configuration Settings

@@ -1,0 +1,346 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@400;600&family=Nunito+Sans:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="res/bento.css">
+  <link rel="stylesheet" href="res/site.css">
+  <link rel="stylesheet" href="res/tree.css">
+  <link rel="stylesheet" href="res/sibling.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" type="image/x-icon" href="img/favicon.png">
+  <title>Material / Stock Import</title>
+</head>
+<body id="site-body" onload="sLoaded()">
+    <header id="site-header">
+        <div id="header-logo"><img src="img/logo.png" width="200" height="78" /></div>
+        <div><p>PPS Interface — Technical Manual</p></div>
+    </header>
+    <div id="site-main">
+        <nav id="site-nav">
+            <div class="treesite">
+ <ul>
+  <li><button class="tree blank"></button><a href="index.html">PPS Interface — Technical Manual</a></li>
+  <li><button class="tree blank"></button><a href="introduction.html">Introduction</a></li>
+  <li><button class="tree blank"></button><a href="architecture.html">Architecture & Data Flow</a></li>
+  <li><button class="tree blank"></button><a href="workflow.html">End-to-End Workflow</a></li>
+  <li><button class="tree blank"></button><a href="orderimport.html">Production Order Import</a></li>
+  <li><button class="tree blank"></button><a href="fieldmapping.html">Field Mapping (Spreadsheet Mapping)</a></li>
+  <li><button class="tree blank"></button><a href="orderupdate.html">Order Update & Cancellation</a></li>
+  <li><button class="tree blank"></button><a class="active" href="materialimport.html">Material / Stock Import</a></li>
+  <li><button class="tree blank"></button><a href="jobexport.html">Job Export</a></li>
+  <li><button class="tree blank"></button><a href="productionpackage.html">Production Package</a></li>
+  <li><button class="tree blank"></button><a href="assemblies.html">Assemblies & Collective Orders</a></li>
+  <li>
+   <button class="tree closed"></button>
+   <a href="appendix/index.html">Appendix</a>
+   <ul class="hide">
+    <li><button class="tree blank"></button><a href="appendix/fieldreference.html">Field Reference</a></li>
+    <li><button class="tree blank"></button><a href="appendix/codes.html">Codes</a></li>
+    <li><button class="tree blank"></button><a href="appendix/settings.html">Configuration Settings</a></li>
+    <li><button class="tree blank"></button><a href="appendix/glossary.html">Glossary</a></li>
+   </ul>
+  </li>
+ </ul>
+</div>
+
+        </nav>
+        <div id="site-nav-right">
+            <nav id="site-crumb">
+ <div>
+  <button>
+   <img src="res/home.png">
+  </button>
+ </div>
+ <div>
+  <a href="materialimport.html">Material / Stock Import</a>
+ </div>
+</nav>
+
+            <div id="site-crumb-below">
+                <div id="site-toc-left">
+                    <article id="article">
+                        <h1>Material / Stock Import</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The <code>StockImp</code> file keeps raw-sheet stock in the production software aligned with the ERP/PPS system. Two operations are supported.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/stock-ops.png" alt="The two stock operations and their creation rules." width="760">
+</div>
+<div class="title">Figure 1. The two stock operations and their creation rules.</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_8_1_operations_creation_rules">8.1 Operations &amp; creation rules</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_totalstock_absolute">TotalStock (absolute)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Provides the complete material inventory (absolute stock) from the ERP/PPS system.</p>
+</li>
+<li>
+<p><strong>Overwrites</strong> the current sheet quantity in the production software.</p>
+</li>
+<li>
+<p>If the sheet / raw material does not exist, it is <strong>always created</strong> — even when the reported quantity is <code>0</code>.</p>
+</li>
+<li>
+<p>In <code>Material</code>, material and thickness are separated by “<code>-</code>”.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_inventorybooking_delta">InventoryBooking (delta)</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Provides changes to stock; the quantity is <strong>added to / subtracted from</strong> the current sheet quantity.</p>
+</li>
+<li>
+<p>If the sheet does not yet exist:</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Positive</strong> quantity → create the sheet and set its quantity.</p>
+</li>
+<li>
+<p><strong>Negative</strong> quantity → do nothing (no sheet is created).</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_8_2_stockimp_fields">8.2 <code>StockImp</code> fields</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Entries sit under <code>&lt;TotalStockData&gt;</code> (as <code>&lt;TotalStock&gt;</code>) or the booking equivalent (as <code>&lt;InventoryBooking&gt;</code>). Both carry the same descriptive fields:</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Element</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>IdentNo</code> (attr)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identifier of the stock / raw-sheet record.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STK-0150</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Material</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Raw-material name (material + thickness; for TotalStock, separated by “-”). Used when creating a new raw material.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STEEL-20</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MaterialDescription</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Human-readable material description.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Steel 2.0 mm, 1-side foil</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sheet comment.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2500×1250×2.0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Length</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sheet length.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2500</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Width</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sheet width.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1250</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Thickness</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sheet thickness.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2.00</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UnitOfDimension</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unit for Length / Width / Thickness (<code>mm</code> or <code>in</code>).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>mm</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TotalQuantity</code> / <code>Quantity</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Absolute quantity (TotalStock) or signed delta (InventoryBooking).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>164.00</code> / <code>-3</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>StockUnit</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unit of the quantity (e.g. pieces).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>pcs</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TotalWeight</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Total weight of the stock.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>8544.50</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MinimumUnclaimedQuantity</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Minimum free / unclaimed quantity to keep.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>BasicMaterial</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Base material group.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>steel</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SpecificWeight</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Specific weight (density).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>7.9</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>UnitOfSpecificWeight</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Unit of the specific weight.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>kg/dm3</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DirectionOfRolling</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rolling direction: <code>1</code>=horizontal, <code>2</code>=vertical, <code>3</code>=none.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_8_3_examples">8.3 Examples</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_totalstock">TotalStock</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;PPSImport Version="1.1"&gt;
+ &lt;TotalStockData&gt;
+  &lt;TotalStock IdentNo="STK-0150"&gt;
+   &lt;Material&gt;STEEL-20&lt;/Material&gt;
+   &lt;Length&gt;2500&lt;/Length&gt;
+   &lt;Width&gt;1250&lt;/Width&gt;
+   &lt;Thickness&gt;2.00&lt;/Thickness&gt;
+   &lt;UnitOfDimension&gt;mm&lt;/UnitOfDimension&gt;
+   &lt;TotalQuantity&gt;164&lt;/TotalQuantity&gt;
+   &lt;DirectionOfRolling&gt;2&lt;/DirectionOfRolling&gt;
+  &lt;/TotalStock&gt;
+ &lt;/TotalStockData&gt;
+&lt;/PPSImport&gt;</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_inventorybooking">InventoryBooking</h3>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;PPSImport Version="1.1"&gt;
+ &lt;InventoryBookingData&gt;
+  &lt;InventoryBooking IdentNo="STK-0150"&gt;
+   &lt;Material&gt;STEEL-15&lt;/Material&gt;
+   &lt;Length&gt;1000&lt;/Length&gt;
+   &lt;Width&gt;500&lt;/Width&gt;
+   &lt;UnitOfDimension&gt;mm&lt;/UnitOfDimension&gt;
+   &lt;Quantity&gt;-3&lt;/Quantity&gt;
+   &lt;Description&gt;Raw sheet&lt;/Description&gt;
+   &lt;DirectionOfRolling&gt;2&lt;/DirectionOfRolling&gt;
+  &lt;/InventoryBooking&gt;
+ &lt;/InventoryBookingData&gt;
+&lt;/PPSImport&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+                    </article>
+                </div>
+                <div id="site-toc-holder">
+                    <aside id="site-toc">
+ <h3>Contents</h3>
+ <ul>
+  <li level="1">
+   <a href="#_8_1_operations_creation_rules">8.1 Operations &amp; creation rules</a>
+  </li>
+  <li level="2">
+   <a href="#_totalstock_absolute">TotalStock (absolute)</a>
+  </li>
+  <li level="2">
+   <a href="#_inventorybooking_delta">InventoryBooking (delta)</a>
+  </li>
+  <li level="1">
+   <a href="#_8_2_stockimp_fields">8.2 <code>StockImp</code> fields</a>
+  </li>
+  <li level="1">
+   <a href="#_8_3_examples">8.3 Examples</a>
+  </li>
+  <li level="2">
+   <a href="#_totalstock">TotalStock</a>
+  </li>
+  <li level="2">
+   <a href="#_inventorybooking">InventoryBooking</a>
+  </li>
+ </ul>
+</aside>
+
+                </div>
+            </div>
+            <nav class="pagination">
+ <span class="prev"><a href="orderupdate.html">Order Update & Cancellation</a></span>
+ <span class="next"><a href="jobexport.html">Job Export</a></span>
+</nav>
+
+        </div>
+        <div id="searchbox">
+          <input id="searchinput" type="search" placeholder="Search... (Key: F)" autocomplete="false" size="30" />
+          <ul id="results"></ul>
+        </div>
+    </div>
+    <footer id="site-footer">
+        <div class="left">
+            <p>&nbsp;&nbsp;Copyright &copy; 2026. Product- and customer-neutral edition. All rights reserved.</p>
+        </div>
+        <div class="middle"></div>
+        <div class="right">
+            <p>Compiled by Bento</p>
+            <img src="res/bento.png" />
+        </div>
+    </footer>
+    <script>
+        // The baseLevel is used to assign the search result pages.
+        var baseLevel = "res".replace("res", "");
+    </script>
+    <script src="https://unpkg.com/lunr/lunr.js"></script>
+    <script src="res/index.js"></script>
+    <script src="res/files.js"></script>
+    <script src="res/site.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+  <script>
+    if (!hljs.initHighlighting.called) {
+      hljs.initHighlighting.called = true
+      ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+    }
+  </script>
+</body>
+</html>

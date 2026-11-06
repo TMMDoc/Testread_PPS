@@ -1,0 +1,88 @@
+= Production Order Import
+:imagesdir: img
+
+The order-import file brings production orders — and the part master data they reference — into the production software.
+
+== 5.1 Structure
+
+A `ProdOrderImp` file contains a `<ProductionOrders>` list (one `<ProductionOrder>` per order line) and a `<Parts>` list (one `<Part>` per distinct part). Orders reference parts by `PartNo`.
+
+.`ProdOrderImp` element tree: orders and part master data in one file.
+image::prodorderimp-tree.png["`ProdOrderImp` element tree: orders and part master data in one file.",760]
+
+=== 5.1.1 `<ProductionOrder>` fields
+
+[%autowidth.stretch,options="header"]
+|===
+|Element |Meaning |Example
+
+|`OrderNo` (attr) |Order identifier; becomes the order’s ID inside the production software. Re-sending the same `OrderNo` is treated as an xref:OrderUpdate#[update]. |`OR-100045`
+|`CustomerOrderNo` |The customer’s / ERP’s own order reference. |`920544`
+|`CustomerName` |End-customer name. |`<customer>`
+|`CustomerNo` |End-customer number. |`1970`
+|`PartNo` |Part produced by this order (joins to `<Part>`). |`P-10044_D`
+|`Description` |Order description. |(optional)
+|`CollectiveOrder` |Collective / grouping order reference. |`JOB-100200`
+|`Assembly` |Assembly / job number. Used to group order lines into a job and to seed the job number. |`JOB-100200`
+|`OrderCategory` |Free category / classification. |(optional)
+|`DueDate` |Due date & time. Format `dd.MM.yyyy HH:mm:ss`. |`27.01.2026 11:47:06`
+|`Priority` |Numeric priority. |`5`
+|`DesiredQuantity` |Quantity ordered. |`16`
+|`Status` |Order status code from the ERP. |`30`
+|`WorkplanName` |Work-plan name (`*` = default). |`*`
+|`ProcessingTime` |Processing-time value. |`0`
+|`MonitoringFlag` |Monitoring flag. |`0`
+|`RollingDirection` |Rolling direction: `1`=horizontal, `2`=vertical, `3`=none. |`3`
+|===
+
+=== 5.1.2 `<Part>` fields
+
+[%autowidth.stretch,options="header"]
+|===
+|Element |Meaning |Example
+
+|`PartNo` (attr) |Part number; also used to locate the CAD file. |`P-10044_D`
+|`Description` |Part description. |`Bracket, front`
+|`IsAutoRemoveable` |Auto-removable flag. |`0`
+|`DrawingNo` |Drawing number. |`DRW-1801739-D`
+|`Material` |Raw-material code. |`STEEL-6.0`
+|`PartNoExt` |External / alternate part number for cross-system identification. |`EXT-2457477`
+|`Version` |Part version / revision. |`D`
+|===
+
+== 5.2 Example
+
+[source,xml]
+----
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<PPSImport Version="1.1">
+  <ProductionOrders>
+    <ProductionOrder OrderNo="OR-100045">
+      <CustomerOrderNo>920544</CustomerOrderNo>
+      <CustomerName><customer></CustomerName>
+      <PartNo>P-10044_D</PartNo>
+      <CollectiveOrder>JOB-100200</CollectiveOrder>
+      <Assembly>JOB-100200</Assembly>
+      <DueDate>27.01.2026 11:47:06</DueDate>
+      <Priority>5</Priority>
+      <DesiredQuantity>16</DesiredQuantity>
+      <Status>30</Status>
+      <RollingDirection>3</RollingDirection>
+    </ProductionOrder>
+  </ProductionOrders>
+  <Parts>
+    <Part PartNo="P-10044_D">
+      <Description>Bracket, front</Description>
+      <DrawingNo>DRW-1801739-D</DrawingNo>
+      <Material>STEEL-6.0</Material>
+      <PartNoExt>EXT-2457477</PartNoExt>
+      <Version>D</Version>
+    </Part>
+  </Parts>
+</PPSImport>
+----
+
+[NOTE]
+====
+*Due-date parsing.* Due dates arrive in `dd.MM.yyyy` order (and the equivalent spreadsheet forms). Ensure the ERP emits this order so dates import correctly.
+====

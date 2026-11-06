@@ -1,0 +1,147 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@400;600&family=Nunito+Sans:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="res/bento.css">
+  <link rel="stylesheet" href="res/site.css">
+  <link rel="stylesheet" href="res/tree.css">
+  <link rel="stylesheet" href="res/sibling.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" type="image/x-icon" href="img/favicon.png">
+  <title>Production Package</title>
+</head>
+<body id="site-body" onload="sLoaded()">
+    <header id="site-header">
+        <div id="header-logo"><img src="img/logo.png" width="200" height="78" /></div>
+        <div><p>PPS Interface — Technical Manual</p></div>
+    </header>
+    <div id="site-main">
+        <nav id="site-nav">
+            <div class="treesite">
+ <ul>
+  <li><button class="tree blank"></button><a href="index.html">PPS Interface — Technical Manual</a></li>
+  <li><button class="tree blank"></button><a href="introduction.html">Introduction</a></li>
+  <li><button class="tree blank"></button><a href="architecture.html">Architecture & Data Flow</a></li>
+  <li><button class="tree blank"></button><a href="workflow.html">End-to-End Workflow</a></li>
+  <li><button class="tree blank"></button><a href="orderimport.html">Production Order Import</a></li>
+  <li><button class="tree blank"></button><a href="fieldmapping.html">Field Mapping (Spreadsheet Mapping)</a></li>
+  <li><button class="tree blank"></button><a href="orderupdate.html">Order Update & Cancellation</a></li>
+  <li><button class="tree blank"></button><a href="materialimport.html">Material / Stock Import</a></li>
+  <li><button class="tree blank"></button><a href="jobexport.html">Job Export</a></li>
+  <li><button class="tree blank"></button><a class="active" href="productionpackage.html">Production Package</a></li>
+  <li><button class="tree blank"></button><a href="assemblies.html">Assemblies & Collective Orders</a></li>
+  <li>
+   <button class="tree closed"></button>
+   <a href="appendix/index.html">Appendix</a>
+   <ul class="hide">
+    <li><button class="tree blank"></button><a href="appendix/fieldreference.html">Field Reference</a></li>
+    <li><button class="tree blank"></button><a href="appendix/codes.html">Codes</a></li>
+    <li><button class="tree blank"></button><a href="appendix/settings.html">Configuration Settings</a></li>
+    <li><button class="tree blank"></button><a href="appendix/glossary.html">Glossary</a></li>
+   </ul>
+  </li>
+ </ul>
+</div>
+
+        </nav>
+        <div id="site-nav-right">
+            <nav id="site-crumb">
+ <div>
+  <button>
+   <img src="res/home.png">
+  </button>
+ </div>
+ <div>
+  <a href="productionpackage.html">Production Package</a>
+ </div>
+</nav>
+
+            <div id="site-crumb-below">
+                <div id="site-toc-left">
+                    <article id="article">
+                        <h1>Production Package</h1>
+<div class="paragraph">
+<p>In addition to the job-feedback XML, releasing a job publishes a full <strong>production package</strong> for the shop floor — the complete, technology-rich description of what the machine will run.</p>
+</div>
+<div class="paragraph">
+<p>The production package is published as a set of files (a package XML with root <code>&lt;ProductionPackage&gt;</code>, a <code>.LST</code> list file, and a printable setup plan). Where the <a href="jobexport.html">job-export</a> file is a compact feedback message for the ERP, the production package is the detailed manufacturing document. Beyond the job/sheet/part data it also carries:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Workplace &amp; machine</strong> — machine name, control type, processing area (X/Y/Z).</p>
+</li>
+<li>
+<p><strong>Manufacturing orders &amp; programs</strong> — program numbers, number of runs, and the production orders each program fulfils, with the part-in-program position sequence.</p>
+</li>
+<li>
+<p><strong>NC programs</strong> — per program: cutting length, processing time, runs, and <strong>production instructions</strong> (slat distances, piercing/marking sequence, palletizing, loading position, etc.).</p>
+</li>
+<li>
+<p><strong>Required sheets</strong> — the raw sheets the package consumes, with dimensions and weights.</p>
+</li>
+<li>
+<p><strong>Technology tables</strong> — laser cutting/technology tables used (gas, kerf, focal length, nozzle, piercing/cutting/contour types).</p>
+</li>
+<li>
+<p><strong>Package totals</strong> — total runtime, total part count, total sheet count, and overall waste.</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>The production package is primarily a <strong>software → machine / shop-floor</strong> artifact. The ERP/PPS integration itself relies on the lighter <a href="jobexport.html">job-export</a> and <a href="orderimport.html">order-import</a> messages; the package is described here for completeness because it is produced at the same release step.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+
+                    </article>
+                </div>
+                <div id="site-toc-holder">
+                    <aside id="site-toc"></aside>
+                </div>
+            </div>
+            <nav class="pagination">
+ <span class="prev"><a href="jobexport.html">Job Export</a></span>
+ <span class="next"><a href="assemblies.html">Assemblies & Collective Orders</a></span>
+</nav>
+
+        </div>
+        <div id="searchbox">
+          <input id="searchinput" type="search" placeholder="Search... (Key: F)" autocomplete="false" size="30" />
+          <ul id="results"></ul>
+        </div>
+    </div>
+    <footer id="site-footer">
+        <div class="left">
+            <p>&nbsp;&nbsp;Copyright &copy; 2026. Product- and customer-neutral edition. All rights reserved.</p>
+        </div>
+        <div class="middle"></div>
+        <div class="right">
+            <p>Compiled by Bento</p>
+            <img src="res/bento.png" />
+        </div>
+    </footer>
+    <script>
+        // The baseLevel is used to assign the search result pages.
+        var baseLevel = "res".replace("res", "");
+    </script>
+    <script src="https://unpkg.com/lunr/lunr.js"></script>
+    <script src="res/index.js"></script>
+    <script src="res/files.js"></script>
+    <script src="res/site.js"></script>
+
+    
+</body>
+</html>

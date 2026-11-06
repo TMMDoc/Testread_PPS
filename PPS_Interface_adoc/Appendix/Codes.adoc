@@ -1,0 +1,22 @@
+= Codes
+:imagesdir: img
+
+== Return codes (`ProdOrderExp`)
+
+[%autowidth.stretch,options="header"]
+|===
+|ReturnCode |Meaning
+
+|`-11` |Order already in production — cancellation / update not possible.
+|===
+
+== Common coded values
+
+[%autowidth.stretch,options="header"]
+|===
+|Field |Values
+
+|`RollingDirection` / `DirectionOfRolling` |`1` = horizontal · `2` = vertical · `3` = none
+|Priority (mapping) |Low · Normal · High · Urgent
+|`WorkplanName` |`*` = default work plan
+|===

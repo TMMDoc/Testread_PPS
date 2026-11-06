@@ -1,0 +1,12 @@
+= Configuration Settings
+:imagesdir: img
+
+[%autowidth.stretch,options="header"]
+|===
+|Setting |Location |Purpose
+
+|PPS output directory |Factory → Settings → Job → Output settings |Single folder for all export files (`JobExp`, `ProdOrderExp`).
+|Spreadsheet-import settings |Factory → Settings → Job |CAD lookup directories and recursive search for part files.
+|Spreadsheet mappings |Factory → Settings → Job → Spreadsheet-import settings |View / delete saved mapping “styles”.
+|“Export unmapped PPS fields as extended properties” |Spreadsheet Mapping dialog |Controls whether unmapped fields become Extra Fields.
+|===

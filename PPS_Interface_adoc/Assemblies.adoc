@@ -1,0 +1,12 @@
+= Assemblies & Collective Orders
+:imagesdir: img
+
+An assembly is represented as a collective order whose component parts arrive as individual order lines sharing the same grouping value.
+
+* Multiple order lines can belong to one *collective order* when they are connected — an assembly is one collective order, and its parts are the component orders. The grouping value is carried in the `Assembly` / `CollectiveOrder` fields and is used as the job number.
+* When importing an assembly through spreadsheet import, the assembly (and its collective-order representation) is created *without* spawning a spurious empty job tile — importing must not create a data-less job.
+
+[WARNING]
+====
+*Known pitfall (resolved).* Previously, importing an assembly via spreadsheet import while unmapping the _Part Order_ field and enabling “import unmapped PPS field as external field” could create an empty job tile, and opening that job’s details raised a database error. The correct behavior is: assembly import creates the assembly only; no empty job is created and job details load cleanly.
+====

@@ -1,0 +1,18 @@
+= Architecture & Data Flow
+:imagesdir: img
+
+The interface is *file-based and asynchronous*. The ERP/PPS system drops import files into a watched input directory; the production software writes feedback files into a configured output directory. Neither side calls the other directly.
+
+.Asynchronous, file-based data flow. The ERP/PPS system and the production software never call each other directly; they exchange files through two directories.
+image::arch-dataflow.png["Asynchronous, file-based data flow. The ERP/PPS system and the production software never call each other directly; they exchange files through two directories.",760]
+_Legend: ERP writes / reads · Software imports · Software exports._
+
+== 2.1 Directories
+
+* *Import directory* — the folder the ERP/PPS system writes order and stock files into. The production software imports these files (via drag-and-drop, the open/import command, or a folder watcher).
+* *PPS output directory* — a single, user-configured folder the production software writes all feedback files into, so the ERP/PPS system has one location to scan. This central location is used _regardless_ of which machine produced the job and regardless of per-machine output folders.
+
+[NOTE]
+====
+Configure the output location under *Factory → Settings → Job → Output settings → PPS output directory*. An invalid or unreachable path (for example a mapped drive not visible to the running process) raises a clear “path does not exist” warning.
+====

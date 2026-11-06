@@ -1,0 +1,17 @@
+= Field Reference
+:imagesdir: img
+
+Quick index of the fields used across the interface. See the linked section for full detail.
+
+[%autowidth.stretch,options="header"]
+|===
+|File |Container |Key fields |Section
+
+|`ProdOrderImp` |`ProductionOrder` |OrderNo, CustomerOrderNo, PartNo, Assembly, CollectiveOrder, DueDate, DesiredQuantity, Priority, Status, RollingDirection |xref:../OrderImport#[§5.1.1]
+|`ProdOrderImp` |`Part` |PartNo, Description, DrawingNo, Material, PartNoExt, Version, IsAutoRemoveable |xref:../OrderImport#[§5.1.2]
+|`StockImp` |`TotalStock` / `InventoryBooking` |IdentNo, Material, Length, Width, Thickness, UnitOfDimension, (Total)Quantity, DirectionOfRolling, BasicMaterial, SpecificWeight, MinimumUnclaimedQuantity |xref:../MaterialImport#[§8.2]
+|`JobExp` |`JobFeedback` |Jobname, TimeStamp, WorkPlace, Barcode, Activity |xref:../JobExport#[§9.3.1]
+|`JobExp` |`ManufacturingOrder` / `Sheet` |ProgramName, NoOfRuns, ProcessingTime, SheetIdentNo, RawMaterial, Dimensions, SheetWeight, Waste |xref:../JobExport#[§9.3.2]
+|`JobExp` |`Part` |PartNo, OrderNo, Quantity, PartDescription, CADFilename, Part geometry, Customer refs |xref:../JobExport#[§9.3.3]
+|`ProdOrderExp` |`ProductionOrderFeedback` |OrderNo, TimeStamp, ReturnCode, ErrorMessage |xref:../OrderUpdate#[§7.4]
+|===

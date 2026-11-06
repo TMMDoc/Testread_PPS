@@ -1,0 +1,134 @@
+= Job Export
+:imagesdir: img
+
+Once layouts are released to the machine, the production software exports a job-feedback file describing each released sheet and the parts nested on it.
+
+== 9.1 When the export happens
+
+* The export is produced once *one or more sheet layouts of a job are released* to the machine (not when parts are merely nested).
+* Each exported file is a *full snapshot* of what is currently released — not a delta. It contains _all_ currently-released parts/layouts.
+* The file is *re-written* whenever a layout changes and is re-released (parts added/removed, a layout deleted and re-nested, etc.).
+
+[NOTE]
+====
+*Worked example.* A job with layouts L1–L3 and parts 1–5: releasing parts 1–3 on L1/L2 exports those; adding part 4 on L3 and releasing re-exports parts 1–4; adding part 5 to L3 and releasing re-exports parts 1–5.
+====
+
+== 9.2 File naming & output
+
+The file is named per job — `JobExp<jobId>.xml` — where `<jobId>` is the internal unique job ID (which satisfies the interface’s “unique ID per job” requirement). All job exports are written to the single central xref:Architecture#[PPS output directory], regardless of which machine produced the job.
+
+== 9.3 Structure
+
+.`JobExp` element tree. One `ManufacturingOrder` per released layout; each carries one `Sheet` and the parts nested on it.
+image::jobexp-tree.png["`JobExp` element tree. One `ManufacturingOrder` per released layout; each carries one `Sheet` and the parts nested on it.",760]
+
+=== 9.3.1 Job level — `<JobFeedback>`
+
+[%autowidth.stretch,options="header"]
+|===
+|Element |Meaning |Example
+
+|`Jobname` (attr) |Job name. |`JOB-100200`
+|`JobNote` |Free job note. |(optional)
+|`TimeStamp` |Export timestamp. |`26.01.2026 13:03:45`
+|`WorkPlace` |Assigned machine(s). A job may span several; all cutting machines are listed comma-separated. *Empty* when no layout info is present, and holds only the *latest* assignment. |`LASER-01`
+|`CostCenter` |Cost center. |(optional)
+|`Barcode` |Job barcode. |`1200017588`
+|`Activity` |Activity / operation type. |`2D sheet processing`
+|===
+
+=== 9.3.2 Layout level — `<ManufacturingOrder>` and `<Sheet>`
+
+[%autowidth.stretch,options="header"]
+|===
+|Element |Level |Meaning |Example
+
+|`ManufacturingOrderName` (attr) |MO |Manufacturing-order (layout) name. |`JOB-100200_01`
+|`ProgramName` |MO |NC program name. |`JOB-100200_1`
+|`NoOfRuns` |MO |Number of times this sheet is run. |`2`
+|`ProcessingTime` |MO |Processing time for the layout. |`25.6000`
+|`SheetIdentNo` (attr) |Sheet |Computed sheet identity: `<RawMaterial> <Xsize>x<Ysize>`. |`STEEL-6.0 4000x1500`
+|`RawMaterial` |Sheet |Raw-material code. |`STEEL-6.0`
+|`Dimensions` |Sheet |`Length`, `Width`, `Thickness`, `Unit`. |`4000×1500×6 mm`
+|`SheetWeight` |Sheet |Weight of the sheet. |`282.6`
+|`Surface`, `Folding`, `Coating`, `OpticalReflection`, `RollingDirection` |Sheet |Sheet attributes / flags. |`10 / -1 / -1 / 0 / 0`
+|`MinimumSheetSizeInX`, `MinimumSheetSizeInY` |MO |Minimum used sheet footprint. |`3995.38 / 1492.00`
+|`Waste` |MO |Waste / scrap figure for the layout. |`34.42`
+|===
+
+=== 9.3.3 Part level — `<PartsOnSheet> → <Part>`
+
+[%autowidth.stretch,options="header"]
+|===
+|Element |Meaning |Example
+
+|`PartNo` (attr) |Part number. |`P-10029_F`
+|`OrderNo` (attr) |Owning order. |`OR-100075`
+|`OperationNo` |Operation number. |`0020`
+|`PartDescription` |Part description (from the import). |`Flange, upper`
+|`DrawingNo` |Drawing number. |`DRW-1801718-F`
+|`CADFilename` / `FullCadFilename` |CAD filename (and full path), incl. format extension. |`P-10029_F.geo`
+|`TargetProcessingTimePerPiece` |Target cut time per piece. |`0.956`
+|`CustomerOrderNo`, `CustomerName`, `CustomerNo` |Customer references (from the import). |`920506 / <customer> / 1970`
+|`DueDate`, `Priority` |Due date and priority. |`28.01.2026 … / 5`
+|`Quantity` |Quantity of this part on this sheet. |`4`
+|`Assembly`, `CollectiveOrder` |Assembly / collective-order grouping. |`JOB-100200`
+|`PartLength`, `PartWidth`, `PartArea`, `PartWeight` |Part geometry & weight (from the software). |`3984 / 192.8 / 0.349 / 16.45`
+|`Barcode`, `OperationBarcode`, `PartNoExt`, `CustomerBookingNo`, `DataExt`, `OrderNoExt`, `OrderCategory`, `SubsequentOperation` |Identification / pass-through fields. Emitted *empty* when no source value exists. |(often blank)
+|===
+
+== 9.4 Example
+
+[source,xml]
+----
+<PPSExport Version="1.1">
+ <JobFeedback Jobname="JOB-100200">
+  <TimeStamp>26.01.2026 13:03:45</TimeStamp>
+  <WorkPlace>LASER-01</WorkPlace>
+  <Barcode>1200017588</Barcode>
+  <Activity>2D sheet processing</Activity>
+  <ManufacturingOrders>
+   <ManufacturingOrder ManufacturingOrderName="JOB-100200_01">
+    <ProgramName>JOB-100200_1</ProgramName>
+    <NoOfRuns>1</NoOfRuns>
+    <ProcessingTime>25.6000</ProcessingTime>
+    <Sheet SheetIdentNo="STEEL-6.0 4000x1500">
+     <RawMaterial>STEEL-6.0</RawMaterial>
+     <Dimensions>
+      <Length>4000</Length><Width>1500</Width>
+      <Thickness>6</Thickness><Unit>mm</Unit>
+     </Dimensions>
+     <SheetWeight>282.6</SheetWeight>
+    </Sheet>
+    <Waste>34.42</Waste>
+    <PartsOnSheet>
+     <Part PartNo="P-10029_F" OrderNo="OR-100075">
+      <PartDescription>Flange, upper</PartDescription>
+      <CADFilename>P-10029_F.geo</CADFilename>
+      <Quantity>4</Quantity>
+      <PartWeight>16.45</PartWeight>
+     </Part>
+    </PartsOnSheet>
+   </ManufacturingOrder>
+  </ManufacturingOrders>
+ </JobFeedback>
+</PPSExport>
+----
+
+== 9.5 Lifecycle rules
+
+[%autowidth.stretch,options="header"]
+|===
+|Event |Effect on the exported XML
+
+|Layout released |File written / updated with all currently-released sheets and parts.
+|Layout *unapproved* / recalled |Machine information is removed; `WorkPlace` must not keep a stale machine and is empty when no layout info remains.
+|Job / layout *deleted or reset* |The file is updated so it no longer shows the previous full information.
+|Job / layout marked *complete* |By design, this does *not* delete the previously exported file.
+|===
+
+[NOTE]
+====
+*SheetIdentNo is computed.* It has no single source property; it is built at export time as `<RawMaterial name> <Xsize>x<Ysize>` (e.g. `STEEL-6.0 4000x1500`), which lets the ERP match the used sheet to its own stock record by size and external name.
+====

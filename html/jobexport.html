@@ -1,0 +1,513 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@400;600&family=Nunito+Sans:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="res/bento.css">
+  <link rel="stylesheet" href="res/site.css">
+  <link rel="stylesheet" href="res/tree.css">
+  <link rel="stylesheet" href="res/sibling.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" type="image/x-icon" href="img/favicon.png">
+  <title>Job Export</title>
+</head>
+<body id="site-body" onload="sLoaded()">
+    <header id="site-header">
+        <div id="header-logo"><img src="img/logo.png" width="200" height="78" /></div>
+        <div><p>PPS Interface — Technical Manual</p></div>
+    </header>
+    <div id="site-main">
+        <nav id="site-nav">
+            <div class="treesite">
+ <ul>
+  <li><button class="tree blank"></button><a href="index.html">PPS Interface — Technical Manual</a></li>
+  <li><button class="tree blank"></button><a href="introduction.html">Introduction</a></li>
+  <li><button class="tree blank"></button><a href="architecture.html">Architecture & Data Flow</a></li>
+  <li><button class="tree blank"></button><a href="workflow.html">End-to-End Workflow</a></li>
+  <li><button class="tree blank"></button><a href="orderimport.html">Production Order Import</a></li>
+  <li><button class="tree blank"></button><a href="fieldmapping.html">Field Mapping (Spreadsheet Mapping)</a></li>
+  <li><button class="tree blank"></button><a href="orderupdate.html">Order Update & Cancellation</a></li>
+  <li><button class="tree blank"></button><a href="materialimport.html">Material / Stock Import</a></li>
+  <li><button class="tree blank"></button><a class="active" href="jobexport.html">Job Export</a></li>
+  <li><button class="tree blank"></button><a href="productionpackage.html">Production Package</a></li>
+  <li><button class="tree blank"></button><a href="assemblies.html">Assemblies & Collective Orders</a></li>
+  <li>
+   <button class="tree closed"></button>
+   <a href="appendix/index.html">Appendix</a>
+   <ul class="hide">
+    <li><button class="tree blank"></button><a href="appendix/fieldreference.html">Field Reference</a></li>
+    <li><button class="tree blank"></button><a href="appendix/codes.html">Codes</a></li>
+    <li><button class="tree blank"></button><a href="appendix/settings.html">Configuration Settings</a></li>
+    <li><button class="tree blank"></button><a href="appendix/glossary.html">Glossary</a></li>
+   </ul>
+  </li>
+ </ul>
+</div>
+
+        </nav>
+        <div id="site-nav-right">
+            <nav id="site-crumb">
+ <div>
+  <button>
+   <img src="res/home.png">
+  </button>
+ </div>
+ <div>
+  <a href="jobexport.html">Job Export</a>
+ </div>
+</nav>
+
+            <div id="site-crumb-below">
+                <div id="site-toc-left">
+                    <article id="article">
+                        <h1>Job Export</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Once layouts are released to the machine, the production software exports a job-feedback file describing each released sheet and the parts nested on it.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_9_1_when_the_export_happens">9.1 When the export happens</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p>The export is produced once <strong>one or more sheet layouts of a job are released</strong> to the machine (not when parts are merely nested).</p>
+</li>
+<li>
+<p>Each exported file is a <strong>full snapshot</strong> of what is currently released — not a delta. It contains <em>all</em> currently-released parts/layouts.</p>
+</li>
+<li>
+<p>The file is <strong>re-written</strong> whenever a layout changes and is re-released (parts added/removed, a layout deleted and re-nested, etc.).</p>
+</li>
+</ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Worked example.</strong> A job with layouts L1–L3 and parts 1–5: releasing parts 1–3 on L1/L2 exports those; adding part 4 on L3 and releasing re-exports parts 1–4; adding part 5 to L3 and releasing re-exports parts 1–5.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_9_2_file_naming_output">9.2 File naming &amp; output</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The file is named per job — <code>JobExp&lt;jobId&gt;.xml</code> — where <code>&lt;jobId&gt;</code> is the internal unique job ID (which satisfies the interface’s “unique ID per job” requirement). All job exports are written to the single central <a href="architecture.html">PPS output directory</a>, regardless of which machine produced the job.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_9_3_structure">9.3 Structure</h2>
+<div class="sectionbody">
+<div class="imageblock">
+<div class="content">
+<img src="img/jobexp-tree.png" alt="`JobExp` element tree. One `ManufacturingOrder` per released layout; each carries one `Sheet` and the parts nested on it." width="760">
+</div>
+<div class="title">Figure 1. <code>JobExp</code> element tree. One <code>ManufacturingOrder</code> per released layout; each carries one <code>Sheet</code> and the parts nested on it.</div>
+</div>
+<div class="sect2">
+<h3 id="_9_3_1_job_level_jobfeedback">9.3.1 Job level — <code>&lt;JobFeedback&gt;</code></h3>
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Element</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Jobname</code> (attr)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JOB-100200</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JobNote</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Free job note.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(optional)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TimeStamp</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Export timestamp.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>26.01.2026 13:03:45</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>WorkPlace</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Assigned machine(s). A job may span several; all cutting machines are listed comma-separated. <strong>Empty</strong> when no layout info is present, and holds only the <strong>latest</strong> assignment.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>LASER-01</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CostCenter</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cost center.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(optional)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Barcode</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job barcode.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1200017588</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Activity</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Activity / operation type.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2D sheet processing</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_9_3_2_layout_level_manufacturingorder_and_sheet">9.3.2 Layout level — <code>&lt;ManufacturingOrder&gt;</code> and <code>&lt;Sheet&gt;</code></h3>
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Element</th>
+<th class="tableblock halign-left valign-top">Level</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ManufacturingOrderName</code> (attr)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MO</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Manufacturing-order (layout) name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JOB-100200_01</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ProgramName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MO</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">NC program name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JOB-100200_1</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>NoOfRuns</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MO</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number of times this sheet is run.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>2</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ProcessingTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MO</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Processing time for the layout.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>25.6000</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SheetIdentNo</code> (attr)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sheet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Computed sheet identity: <code>&lt;RawMaterial&gt; &lt;Xsize&gt;x&lt;Ysize&gt;</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STEEL-6.0 4000x1500</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>RawMaterial</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sheet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Raw-material code.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STEEL-6.0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Dimensions</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sheet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Length</code>, <code>Width</code>, <code>Thickness</code>, <code>Unit</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4000×1500×6 mm</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>SheetWeight</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sheet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Weight of the sheet.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>282.6</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Surface</code>, <code>Folding</code>, <code>Coating</code>, <code>OpticalReflection</code>, <code>RollingDirection</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sheet</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sheet attributes / flags.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>10 / -1 / -1 / 0 / 0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MinimumSheetSizeInX</code>, <code>MinimumSheetSizeInY</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MO</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Minimum used sheet footprint.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>3995.38 / 1492.00</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Waste</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MO</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Waste / scrap figure for the layout.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>34.42</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_9_3_3_part_level_partsonsheet_part">9.3.3 Part level — <code>&lt;PartsOnSheet&gt; → &lt;Part&gt;</code></h3>
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Element</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PartNo</code> (attr)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Part number.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>P-10029_F</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>OrderNo</code> (attr)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Owning order.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>OR-100075</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>OperationNo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Operation number.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0020</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PartDescription</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Part description (from the import).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Flange, upper</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DrawingNo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Drawing number.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DRW-1801718-F</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CADFilename</code> / <code>FullCadFilename</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">CAD filename (and full path), incl. format extension.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>P-10029_F.geo</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>TargetProcessingTimePerPiece</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Target cut time per piece.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0.956</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CustomerOrderNo</code>, <code>CustomerName</code>, <code>CustomerNo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Customer references (from the import).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>920506 / &lt;customer&gt; / 1970</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DueDate</code>, <code>Priority</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Due date and priority.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>28.01.2026 … / 5</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Quantity</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quantity of this part on this sheet.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>4</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Assembly</code>, <code>CollectiveOrder</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Assembly / collective-order grouping.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JOB-100200</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PartLength</code>, <code>PartWidth</code>, <code>PartArea</code>, <code>PartWeight</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Part geometry &amp; weight (from the software).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>3984 / 192.8 / 0.349 / 16.45</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Barcode</code>, <code>OperationBarcode</code>, <code>PartNoExt</code>, <code>CustomerBookingNo</code>, <code>DataExt</code>, <code>OrderNoExt</code>, <code>OrderCategory</code>, <code>SubsequentOperation</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Identification / pass-through fields. Emitted <strong>empty</strong> when no source value exists.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(often blank)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_9_4_example">9.4 Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;PPSExport Version="1.1"&gt;
+ &lt;JobFeedback Jobname="JOB-100200"&gt;
+  &lt;TimeStamp&gt;26.01.2026 13:03:45&lt;/TimeStamp&gt;
+  &lt;WorkPlace&gt;LASER-01&lt;/WorkPlace&gt;
+  &lt;Barcode&gt;1200017588&lt;/Barcode&gt;
+  &lt;Activity&gt;2D sheet processing&lt;/Activity&gt;
+  &lt;ManufacturingOrders&gt;
+   &lt;ManufacturingOrder ManufacturingOrderName="JOB-100200_01"&gt;
+    &lt;ProgramName&gt;JOB-100200_1&lt;/ProgramName&gt;
+    &lt;NoOfRuns&gt;1&lt;/NoOfRuns&gt;
+    &lt;ProcessingTime&gt;25.6000&lt;/ProcessingTime&gt;
+    &lt;Sheet SheetIdentNo="STEEL-6.0 4000x1500"&gt;
+     &lt;RawMaterial&gt;STEEL-6.0&lt;/RawMaterial&gt;
+     &lt;Dimensions&gt;
+      &lt;Length&gt;4000&lt;/Length&gt;&lt;Width&gt;1500&lt;/Width&gt;
+      &lt;Thickness&gt;6&lt;/Thickness&gt;&lt;Unit&gt;mm&lt;/Unit&gt;
+     &lt;/Dimensions&gt;
+     &lt;SheetWeight&gt;282.6&lt;/SheetWeight&gt;
+    &lt;/Sheet&gt;
+    &lt;Waste&gt;34.42&lt;/Waste&gt;
+    &lt;PartsOnSheet&gt;
+     &lt;Part PartNo="P-10029_F" OrderNo="OR-100075"&gt;
+      &lt;PartDescription&gt;Flange, upper&lt;/PartDescription&gt;
+      &lt;CADFilename&gt;P-10029_F.geo&lt;/CADFilename&gt;
+      &lt;Quantity&gt;4&lt;/Quantity&gt;
+      &lt;PartWeight&gt;16.45&lt;/PartWeight&gt;
+     &lt;/Part&gt;
+    &lt;/PartsOnSheet&gt;
+   &lt;/ManufacturingOrder&gt;
+  &lt;/ManufacturingOrders&gt;
+ &lt;/JobFeedback&gt;
+&lt;/PPSExport&gt;</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_9_5_lifecycle_rules">9.5 Lifecycle rules</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Event</th>
+<th class="tableblock halign-left valign-top">Effect on the exported XML</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Layout released</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">File written / updated with all currently-released sheets and parts.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Layout <strong>unapproved</strong> / recalled</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Machine information is removed; <code>WorkPlace</code> must not keep a stale machine and is empty when no layout info remains.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job / layout <strong>deleted or reset</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The file is updated so it no longer shows the previous full information.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job / layout marked <strong>complete</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">By design, this does <strong>not</strong> delete the previously exported file.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>SheetIdentNo is computed.</strong> It has no single source property; it is built at export time as <code>&lt;RawMaterial name&gt; &lt;Xsize&gt;x&lt;Ysize&gt;</code> (e.g. <code>STEEL-6.0 4000x1500</code>), which lets the ERP match the used sheet to its own stock record by size and external name.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+
+                    </article>
+                </div>
+                <div id="site-toc-holder">
+                    <aside id="site-toc">
+ <h3>Contents</h3>
+ <ul>
+  <li level="1">
+   <a href="#_9_1_when_the_export_happens">9.1 When the export happens</a>
+  </li>
+  <li level="1">
+   <a href="#_9_2_file_naming_output">9.2 File naming &amp; output</a>
+  </li>
+  <li level="1">
+   <a href="#_9_3_structure">9.3 Structure</a>
+  </li>
+  <li level="2">
+   <a href="#_9_3_1_job_level_jobfeedback">9.3.1 Job level — <code>&lt;JobFeedback&gt;</code></a>
+  </li>
+  <li level="2">
+   <a href="#_9_3_2_layout_level_manufacturingorder_and_sheet">9.3.2 Layout level — <code>&lt;ManufacturingOrder&gt;</code> and <code>&lt;Sheet&gt;</code></a>
+  </li>
+  <li level="2">
+   <a href="#_9_3_3_part_level_partsonsheet_part">9.3.3 Part level — <code>&lt;PartsOnSheet&gt; → &lt;Part&gt;</code></a>
+  </li>
+  <li level="1">
+   <a href="#_9_4_example">9.4 Example</a>
+  </li>
+  <li level="1">
+   <a href="#_9_5_lifecycle_rules">9.5 Lifecycle rules</a>
+  </li>
+ </ul>
+</aside>
+
+                </div>
+            </div>
+            <nav class="pagination">
+ <span class="prev"><a href="materialimport.html">Material / Stock Import</a></span>
+ <span class="next"><a href="productionpackage.html">Production Package</a></span>
+</nav>
+
+        </div>
+        <div id="searchbox">
+          <input id="searchinput" type="search" placeholder="Search... (Key: F)" autocomplete="false" size="30" />
+          <ul id="results"></ul>
+        </div>
+    </div>
+    <footer id="site-footer">
+        <div class="left">
+            <p>&nbsp;&nbsp;Copyright &copy; 2026. Product- and customer-neutral edition. All rights reserved.</p>
+        </div>
+        <div class="middle"></div>
+        <div class="right">
+            <p>Compiled by Bento</p>
+            <img src="res/bento.png" />
+        </div>
+    </footer>
+    <script>
+        // The baseLevel is used to assign the search result pages.
+        var baseLevel = "res".replace("res", "");
+    </script>
+    <script src="https://unpkg.com/lunr/lunr.js"></script>
+    <script src="res/index.js"></script>
+    <script src="res/files.js"></script>
+    <script src="res/site.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+  <script>
+    if (!hljs.initHighlighting.called) {
+      hljs.initHighlighting.called = true
+      ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+    }
+  </script>
+</body>
+</html>

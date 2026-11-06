@@ -1,0 +1,356 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@400;600&family=Nunito+Sans:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="res/bento.css">
+  <link rel="stylesheet" href="res/site.css">
+  <link rel="stylesheet" href="res/tree.css">
+  <link rel="stylesheet" href="res/sibling.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" type="image/x-icon" href="img/favicon.png">
+  <title>Production Order Import</title>
+</head>
+<body id="site-body" onload="sLoaded()">
+    <header id="site-header">
+        <div id="header-logo"><img src="img/logo.png" width="200" height="78" /></div>
+        <div><p>PPS Interface — Technical Manual</p></div>
+    </header>
+    <div id="site-main">
+        <nav id="site-nav">
+            <div class="treesite">
+ <ul>
+  <li><button class="tree blank"></button><a href="index.html">PPS Interface — Technical Manual</a></li>
+  <li><button class="tree blank"></button><a href="introduction.html">Introduction</a></li>
+  <li><button class="tree blank"></button><a href="architecture.html">Architecture & Data Flow</a></li>
+  <li><button class="tree blank"></button><a href="workflow.html">End-to-End Workflow</a></li>
+  <li><button class="tree blank"></button><a class="active" href="orderimport.html">Production Order Import</a></li>
+  <li><button class="tree blank"></button><a href="fieldmapping.html">Field Mapping (Spreadsheet Mapping)</a></li>
+  <li><button class="tree blank"></button><a href="orderupdate.html">Order Update & Cancellation</a></li>
+  <li><button class="tree blank"></button><a href="materialimport.html">Material / Stock Import</a></li>
+  <li><button class="tree blank"></button><a href="jobexport.html">Job Export</a></li>
+  <li><button class="tree blank"></button><a href="productionpackage.html">Production Package</a></li>
+  <li><button class="tree blank"></button><a href="assemblies.html">Assemblies & Collective Orders</a></li>
+  <li>
+   <button class="tree closed"></button>
+   <a href="appendix/index.html">Appendix</a>
+   <ul class="hide">
+    <li><button class="tree blank"></button><a href="appendix/fieldreference.html">Field Reference</a></li>
+    <li><button class="tree blank"></button><a href="appendix/codes.html">Codes</a></li>
+    <li><button class="tree blank"></button><a href="appendix/settings.html">Configuration Settings</a></li>
+    <li><button class="tree blank"></button><a href="appendix/glossary.html">Glossary</a></li>
+   </ul>
+  </li>
+ </ul>
+</div>
+
+        </nav>
+        <div id="site-nav-right">
+            <nav id="site-crumb">
+ <div>
+  <button>
+   <img src="res/home.png">
+  </button>
+ </div>
+ <div>
+  <a href="orderimport.html">Production Order Import</a>
+ </div>
+</nav>
+
+            <div id="site-crumb-below">
+                <div id="site-toc-left">
+                    <article id="article">
+                        <h1>Production Order Import</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The order-import file brings production orders — and the part master data they reference — into the production software.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_5_1_structure">5.1 Structure</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>A <code>ProdOrderImp</code> file contains a <code>&lt;ProductionOrders&gt;</code> list (one <code>&lt;ProductionOrder&gt;</code> per order line) and a <code>&lt;Parts&gt;</code> list (one <code>&lt;Part&gt;</code> per distinct part). Orders reference parts by <code>PartNo</code>.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/prodorderimp-tree.png" alt="`ProdOrderImp` element tree: orders and part master data in one file." width="760">
+</div>
+<div class="title">Figure 1. <code>ProdOrderImp</code> element tree: orders and part master data in one file.</div>
+</div>
+<div class="sect2">
+<h3 id="_5_1_1_productionorder_fields">5.1.1 <code>&lt;ProductionOrder&gt;</code> fields</h3>
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Element</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>OrderNo</code> (attr)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Order identifier; becomes the order’s ID inside the production software. Re-sending the same <code>OrderNo</code> is treated as an <a href="orderupdate.html">update</a>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>OR-100045</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CustomerOrderNo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">The customer’s / ERP’s own order reference.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>920544</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CustomerName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">End-customer name.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;customer&gt;</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CustomerNo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">End-customer number.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>1970</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PartNo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Part produced by this order (joins to <code>&lt;Part&gt;</code>).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>P-10044_D</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Order description.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(optional)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>CollectiveOrder</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Collective / grouping order reference.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JOB-100200</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Assembly</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Assembly / job number. Used to group order lines into a job and to seed the job number.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JOB-100200</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>OrderCategory</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Free category / classification.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(optional)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DueDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Due date &amp; time. Format <code>dd.MM.yyyy HH:mm:ss</code>.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>27.01.2026 11:47:06</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Priority</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Numeric priority.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>5</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DesiredQuantity</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quantity ordered.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>16</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Status</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Order status code from the ERP.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>30</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>WorkplanName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Work-plan name (<code>*</code> = default).</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>*</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ProcessingTime</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Processing-time value.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>MonitoringFlag</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Monitoring flag.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>RollingDirection</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rolling direction: <code>1</code>=horizontal, <code>2</code>=vertical, <code>3</code>=none.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>3</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_5_1_2_part_fields">5.1.2 <code>&lt;Part&gt;</code> fields</h3>
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Element</th>
+<th class="tableblock halign-left valign-top">Meaning</th>
+<th class="tableblock halign-left valign-top">Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PartNo</code> (attr)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Part number; also used to locate the CAD file.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>P-10044_D</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Description</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Part description.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Bracket, front</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>IsAutoRemoveable</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Auto-removable flag.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DrawingNo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Drawing number.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>DRW-1801739-D</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Material</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Raw-material code.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>STEEL-6.0</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PartNoExt</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">External / alternate part number for cross-system identification.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>EXT-2457477</code></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Version</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Part version / revision.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>D</code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_5_2_example">5.2 Example</h2>
+<div class="sectionbody">
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-xml hljs" data-lang="xml">&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+&lt;PPSImport Version="1.1"&gt;
+  &lt;ProductionOrders&gt;
+    &lt;ProductionOrder OrderNo="OR-100045"&gt;
+      &lt;CustomerOrderNo&gt;920544&lt;/CustomerOrderNo&gt;
+      &lt;CustomerName&gt;&lt;customer&gt;&lt;/CustomerName&gt;
+      &lt;PartNo&gt;P-10044_D&lt;/PartNo&gt;
+      &lt;CollectiveOrder&gt;JOB-100200&lt;/CollectiveOrder&gt;
+      &lt;Assembly&gt;JOB-100200&lt;/Assembly&gt;
+      &lt;DueDate&gt;27.01.2026 11:47:06&lt;/DueDate&gt;
+      &lt;Priority&gt;5&lt;/Priority&gt;
+      &lt;DesiredQuantity&gt;16&lt;/DesiredQuantity&gt;
+      &lt;Status&gt;30&lt;/Status&gt;
+      &lt;RollingDirection&gt;3&lt;/RollingDirection&gt;
+    &lt;/ProductionOrder&gt;
+  &lt;/ProductionOrders&gt;
+  &lt;Parts&gt;
+    &lt;Part PartNo="P-10044_D"&gt;
+      &lt;Description&gt;Bracket, front&lt;/Description&gt;
+      &lt;DrawingNo&gt;DRW-1801739-D&lt;/DrawingNo&gt;
+      &lt;Material&gt;STEEL-6.0&lt;/Material&gt;
+      &lt;PartNoExt&gt;EXT-2457477&lt;/PartNoExt&gt;
+      &lt;Version&gt;D&lt;/Version&gt;
+    &lt;/Part&gt;
+  &lt;/Parts&gt;
+&lt;/PPSImport&gt;</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Due-date parsing.</strong> Due dates arrive in <code>dd.MM.yyyy</code> order (and the equivalent spreadsheet forms). Ensure the ERP emits this order so dates import correctly.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+
+                    </article>
+                </div>
+                <div id="site-toc-holder">
+                    <aside id="site-toc">
+ <h3>Contents</h3>
+ <ul>
+  <li level="1">
+   <a href="#_5_1_structure">5.1 Structure</a>
+  </li>
+  <li level="2">
+   <a href="#_5_1_1_productionorder_fields">5.1.1 <code>&lt;ProductionOrder&gt;</code> fields</a>
+  </li>
+  <li level="2">
+   <a href="#_5_1_2_part_fields">5.1.2 <code>&lt;Part&gt;</code> fields</a>
+  </li>
+  <li level="1">
+   <a href="#_5_2_example">5.2 Example</a>
+  </li>
+ </ul>
+</aside>
+
+                </div>
+            </div>
+            <nav class="pagination">
+ <span class="prev"><a href="workflow.html">End-to-End Workflow</a></span>
+ <span class="next"><a href="fieldmapping.html">Field Mapping (Spreadsheet Mapping)</a></span>
+</nav>
+
+        </div>
+        <div id="searchbox">
+          <input id="searchinput" type="search" placeholder="Search... (Key: F)" autocomplete="false" size="30" />
+          <ul id="results"></ul>
+        </div>
+    </div>
+    <footer id="site-footer">
+        <div class="left">
+            <p>&nbsp;&nbsp;Copyright &copy; 2026. Product- and customer-neutral edition. All rights reserved.</p>
+        </div>
+        <div class="middle"></div>
+        <div class="right">
+            <p>Compiled by Bento</p>
+            <img src="res/bento.png" />
+        </div>
+    </footer>
+    <script>
+        // The baseLevel is used to assign the search result pages.
+        var baseLevel = "res".replace("res", "");
+    </script>
+    <script src="https://unpkg.com/lunr/lunr.js"></script>
+    <script src="res/index.js"></script>
+    <script src="res/files.js"></script>
+    <script src="res/site.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+  <script>
+    if (!hljs.initHighlighting.called) {
+      hljs.initHighlighting.called = true
+      ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+    }
+  </script>
+</body>
+</html>

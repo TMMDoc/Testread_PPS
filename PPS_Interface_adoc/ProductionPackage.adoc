@@ -1,0 +1,18 @@
+= Production Package
+:imagesdir: img
+
+In addition to the job-feedback XML, releasing a job publishes a full *production package* for the shop floor — the complete, technology-rich description of what the machine will run.
+
+The production package is published as a set of files (a package XML with root `<ProductionPackage>`, a `.LST` list file, and a printable setup plan). Where the xref:JobExport#[job-export] file is a compact feedback message for the ERP, the production package is the detailed manufacturing document. Beyond the job/sheet/part data it also carries:
+
+* *Workplace & machine* — machine name, control type, processing area (X/Y/Z).
+* *Manufacturing orders & programs* — program numbers, number of runs, and the production orders each program fulfils, with the part-in-program position sequence.
+* *NC programs* — per program: cutting length, processing time, runs, and *production instructions* (slat distances, piercing/marking sequence, palletizing, loading position, etc.).
+* *Required sheets* — the raw sheets the package consumes, with dimensions and weights.
+* *Technology tables* — laser cutting/technology tables used (gas, kerf, focal length, nozzle, piercing/cutting/contour types).
+* *Package totals* — total runtime, total part count, total sheet count, and overall waste.
+
+[NOTE]
+====
+The production package is primarily a *software → machine / shop-floor* artifact. The ERP/PPS integration itself relies on the lighter xref:JobExport#[job-export] and xref:OrderImport#[order-import] messages; the package is described here for completeness because it is produced at the same release step.
+====

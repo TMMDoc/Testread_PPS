@@ -1,0 +1,21 @@
+= Glossary
+:imagesdir: img
+
+[%autowidth.stretch,options="header"]
+|===
+|Term |Definition
+
+|PPS |Production-planning system (the external ERP). Also used loosely for the exchanged interface files.
+|Mapping / Style |A named association between an import file’s fields and the software’s own fields.
+|Order |A production-order line requesting a quantity of a part by a due date.
+|Job |A grouping of orders planned together; aggregates one or more layouts.
+|Layout |A nested sheet; maps to a manufacturing order in the export.
+|Manufacturing order |Export-side representation of a released layout (one sheet + its parts).
+|Assembly / Collective order |A set of connected order lines produced together, grouped by a shared number.
+|Extra Fields |Imported-but-unmapped fields carried as pass-through properties.
+|Production package |The full shop-floor manufacturing document (NC, technology, sheets, totals) published at release.
+|===
+
+*PPS Interface — Technical Manual.* Compiled from interface specifications, exchange-file samples and implementation notes. Product- and customer-neutral edition.
+
+All company, product, customer and personal names have been intentionally omitted; identifiers in examples are fictitious. · Interface envelope version 1.1.

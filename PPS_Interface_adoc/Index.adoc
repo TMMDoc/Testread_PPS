@@ -1,0 +1,28 @@
+= PPS Interface — Technical Manual
+:imagesdir: img
+
+The PPS interface is a file-based XML / spreadsheet interface that connects an external ERP / production-planning system (PPS) to the sheet-metal nesting & production software — for order import, material synchronization, and job feedback.
+
+== At a glance
+
+* *Transport:* file exchange (XML  CSV  XLS  XLSX)
+* *Interface version:* 1.1
+* *Directions:* import & export
+* *Audience:* integrators & administrators
+
+== Contents
+
+* xref:Introduction#[1  Introduction]
+* xref:Architecture#[2  Architecture & Data Flow]
+* xref:Workflow#[4  End-to-End Workflow]
+* xref:OrderImport#[5  Production Order Import]
+* xref:FieldMapping#[6  Field Mapping]
+* xref:OrderUpdate#[7  Order Update & Cancellation]
+* xref:MaterialImport#[8  Material / Stock Import]
+* xref:JobExport#[9  Job Export]
+* xref:ProductionPackage#[10  Production Package]
+* xref:Assemblies#[11  Assemblies & Collective Orders]
+* xref:Appendix/FieldReference#[A  Field Reference]
+* xref:Appendix/Codes#[B  Return & Status Codes]
+* xref:Appendix/Settings#[C  Configuration Settings]
+* xref:Appendix/Glossary#[D  Glossary]

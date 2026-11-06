@@ -1,0 +1,5 @@
+TITLE=PPS Interface — Technical Manual
+OUTDIR=../HTML
+LOGO=img/logo.png,200,78
+FAVICON=img/favicon.png
+COPYRIGHT=Copyright &copy; 2026. Product- and customer-neutral edition. All rights reserved.

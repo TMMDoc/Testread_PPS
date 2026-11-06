@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@400;600&family=Nunito+Sans:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="res/bento.css">
+  <link rel="stylesheet" href="res/site.css">
+  <link rel="stylesheet" href="res/tree.css">
+  <link rel="stylesheet" href="res/sibling.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" type="image/x-icon" href="img/favicon.png">
+  <title>PPS Interface — Technical Manual</title>
+</head>
+<body id="site-body" onload="sLoaded()">
+    <header id="site-header">
+        <div id="header-logo"><img src="img/logo.png" width="200" height="78" /></div>
+        <div><p>PPS Interface — Technical Manual</p></div>
+    </header>
+    <div id="site-main">
+        <nav id="site-nav">
+            <div class="treesite">
+ <ul>
+  <li><button class="tree blank"></button><a class="active" href="index.html">PPS Interface — Technical Manual</a></li>
+  <li><button class="tree blank"></button><a href="introduction.html">Introduction</a></li>
+  <li><button class="tree blank"></button><a href="architecture.html">Architecture & Data Flow</a></li>
+  <li><button class="tree blank"></button><a href="workflow.html">End-to-End Workflow</a></li>
+  <li><button class="tree blank"></button><a href="orderimport.html">Production Order Import</a></li>
+  <li><button class="tree blank"></button><a href="fieldmapping.html">Field Mapping (Spreadsheet Mapping)</a></li>
+  <li><button class="tree blank"></button><a href="orderupdate.html">Order Update & Cancellation</a></li>
+  <li><button class="tree blank"></button><a href="materialimport.html">Material / Stock Import</a></li>
+  <li><button class="tree blank"></button><a href="jobexport.html">Job Export</a></li>
+  <li><button class="tree blank"></button><a href="productionpackage.html">Production Package</a></li>
+  <li><button class="tree blank"></button><a href="assemblies.html">Assemblies & Collective Orders</a></li>
+  <li>
+   <button class="tree closed"></button>
+   <a href="appendix/index.html">Appendix</a>
+   <ul class="hide">
+    <li><button class="tree blank"></button><a href="appendix/fieldreference.html">Field Reference</a></li>
+    <li><button class="tree blank"></button><a href="appendix/codes.html">Codes</a></li>
+    <li><button class="tree blank"></button><a href="appendix/settings.html">Configuration Settings</a></li>
+    <li><button class="tree blank"></button><a href="appendix/glossary.html">Glossary</a></li>
+   </ul>
+  </li>
+ </ul>
+</div>
+
+        </nav>
+        <div id="site-nav-right">
+            <nav id="site-crumb">
+ <div>
+  <button>
+   <img src="res/home.png">
+  </button>
+ </div>
+ <div>
+  <a href="index.html">PPS Interface — Technical Manual</a>
+ </div>
+</nav>
+
+            <div id="site-crumb-below">
+                <div id="site-toc-left">
+                    <article id="article">
+                        <h1>PPS Interface — Technical Manual</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>The PPS interface is a file-based XML / spreadsheet interface that connects an external ERP / production-planning system (PPS) to the sheet-metal nesting &amp; production software — for order import, material synchronization, and job feedback.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_at_a_glance">At a glance</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Transport:</strong> file exchange (XML  CSV  XLS  XLSX)</p>
+</li>
+<li>
+<p><strong>Interface version:</strong> 1.1</p>
+</li>
+<li>
+<p><strong>Directions:</strong> import &amp; export</p>
+</li>
+<li>
+<p><strong>Audience:</strong> integrators &amp; administrators</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_contents">Contents</h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><a href="introduction.html">1  Introduction</a></p>
+</li>
+<li>
+<p><a href="architecture.html">2  Architecture &amp; Data Flow</a></p>
+</li>
+<li>
+<p><a href="workflow.html">4  End-to-End Workflow</a></p>
+</li>
+<li>
+<p><a href="orderimport.html">5  Production Order Import</a></p>
+</li>
+<li>
+<p><a href="fieldmapping.html">6  Field Mapping</a></p>
+</li>
+<li>
+<p><a href="orderupdate.html">7  Order Update &amp; Cancellation</a></p>
+</li>
+<li>
+<p><a href="materialimport.html">8  Material / Stock Import</a></p>
+</li>
+<li>
+<p><a href="jobexport.html">9  Job Export</a></p>
+</li>
+<li>
+<p><a href="productionpackage.html">10  Production Package</a></p>
+</li>
+<li>
+<p><a href="assemblies.html">11  Assemblies &amp; Collective Orders</a></p>
+</li>
+<li>
+<p><a href="appendix/fieldreference.html">A  Field Reference</a></p>
+</li>
+<li>
+<p><a href="appendix/codes.html">B  Return &amp; Status Codes</a></p>
+</li>
+<li>
+<p><a href="appendix/settings.html">C  Configuration Settings</a></p>
+</li>
+<li>
+<p><a href="appendix/glossary.html">D  Glossary</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+                    </article>
+                </div>
+                <div id="site-toc-holder">
+                    <aside id="site-toc">
+ <h3>Contents</h3>
+ <ul>
+  <li level="1">
+   <a href="#_at_a_glance">At a glance</a>
+  </li>
+  <li level="1">
+   <a href="#_contents">Contents</a>
+  </li>
+ </ul>
+</aside>
+
+                </div>
+            </div>
+            <nav class="pagination">
+ <span class="next"><a href="introduction.html">Introduction</a></span>
+</nav>
+
+        </div>
+        <div id="searchbox">
+          <input id="searchinput" type="search" placeholder="Search... (Key: F)" autocomplete="false" size="30" />
+          <ul id="results"></ul>
+        </div>
+    </div>
+    <footer id="site-footer">
+        <div class="left">
+            <p>&nbsp;&nbsp;Copyright &copy; 2026. Product- and customer-neutral edition. All rights reserved.</p>
+        </div>
+        <div class="middle"></div>
+        <div class="right">
+            <p>Compiled 2026.11.06 by Bento 59</p>
+            <img src="res/bento.png" />
+        </div>
+    </footer>
+    <script>
+        // The baseLevel is used to assign the search result pages.
+        var baseLevel = "res".replace("res", "");
+    </script>
+    <script src="https://unpkg.com/lunr/lunr.js"></script>
+    <script src="res/index.js"></script>
+    <script src="res/files.js"></script>
+    <script src="res/site.js"></script>
+
+    
+</body>
+</html>

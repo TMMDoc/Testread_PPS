@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@400;600&family=Nunito+Sans:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="res/bento.css">
+  <link rel="stylesheet" href="res/site.css">
+  <link rel="stylesheet" href="res/tree.css">
+  <link rel="stylesheet" href="res/sibling.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" type="image/x-icon" href="img/favicon.png">
+  <title>File Reference</title>
+</head>
+<body id="site-body" onload="sLoaded()">
+    <header id="site-header">
+        <div id="header-logo"><img src="img/logo.png" width="200" height="78" /></div>
+        <div><p>PPS Interface — Technical Manual</p></div>
+    </header>
+    <div id="site-main">
+        <nav id="site-nav">
+            <div class="treesite">
+ <ul>
+  <li><button class="tree blank"></button><a href="index.html">PPS Interface — Technical Manual</a></li>
+  <li><button class="tree blank"></button><a href="introduction.html">Introduction</a></li>
+  <li><button class="tree blank"></button><a href="architecture.html">Architecture & Data Flow</a></li>
+  <li><button class="tree blank"></button><a class="active" href="filereference.html">File Reference</a></li>
+  <li><button class="tree blank"></button><a href="workflow.html">End-to-End Workflow</a></li>
+  <li><button class="tree blank"></button><a href="orderimport.html">Production Order Import</a></li>
+  <li><button class="tree blank"></button><a href="fieldmapping.html">Field Mapping (Spreadsheet Mapping)</a></li>
+  <li><button class="tree blank"></button><a href="orderupdate.html">Order Update & Cancellation</a></li>
+  <li><button class="tree blank"></button><a href="materialimport.html">Material / Stock Import</a></li>
+  <li><button class="tree blank"></button><a href="jobexport.html">Job Export</a></li>
+  <li><button class="tree blank"></button><a href="productionpackage.html">Production Package</a></li>
+  <li><button class="tree blank"></button><a href="assemblies.html">Assemblies & Collective Orders</a></li>
+  <li>
+   <button class="tree closed"></button>
+   <a href="appendix/index.html">Appendix</a>
+   <ul class="hide">
+    <li><button class="tree blank"></button><a href="appendix/fieldreference.html">Field Reference</a></li>
+    <li><button class="tree blank"></button><a href="appendix/codes.html">Codes</a></li>
+    <li><button class="tree blank"></button><a href="appendix/settings.html">Configuration Settings</a></li>
+    <li><button class="tree blank"></button><a href="appendix/glossary.html">Glossary</a></li>
+   </ul>
+  </li>
+ </ul>
+</div>
+
+        </nav>
+        <div id="site-nav-right">
+            <nav id="site-crumb">
+ <div>
+  <button>
+   <img src="res/home.png">
+  </button>
+ </div>
+ <div>
+  <a href="filereference.html">File Reference</a>
+ </div>
+</nav>
+
+            <div id="site-crumb-below">
+                <div id="site-toc-left">
+                    <article id="article">
+                        <h1>File Reference</h1>
+<div class="paragraph">
+<p>All exchanged files share the interface envelope <code>Version="1.1"</code>. Import files use the root element <code>&lt;PPSImport&gt;</code>; export files use <code>&lt;PPSExport&gt;</code>.</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">File (pattern)</th>
+<th class="tableblock halign-left valign-top">Root element</th>
+<th class="tableblock halign-left valign-top">Direction</th>
+<th class="tableblock halign-left valign-top">Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ProdOrderImp*.xml</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PPSImport</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(IN)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Create, update or cancel production orders; carry part master data. <a href="orderimport.html">§5</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>StockImp*.xml</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PPSImport</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(IN)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Material stock sync — absolute (TotalStock) or delta (InventoryBooking). <a href="materialimport.html">§8</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>JobExp*.xml</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PPSExport</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(OUT)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Job feedback: sheets, parts-on-sheet, times, waste. <a href="jobexport.html">§9</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ProdOrderExp.xml</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>PPSExport</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(OUT)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Order feedback — e.g. denial of an update/cancel that arrived too late. <a href="orderupdate.html">§7</a></p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>&lt;Job&gt;.xml</code> + <code>.LST</code> + setup plan</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ProductionPackage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">(OUT)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Full production package (NC data, technology tables) published for the machine / plant. <a href="productionpackage.html">§10</a></p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Spreadsheet equivalents (<code>.csv</code>, <code>.xls</code>, <code>.xlsx</code>) may be used in place of the XML import files; they are mapped through the same dialog described in <a href="fieldmapping.html">§6</a>.</p>
+</div>
+
+                    </article>
+                </div>
+                <div id="site-toc-holder">
+                    <aside id="site-toc"></aside>
+                </div>
+            </div>
+            <nav class="pagination">
+ <span class="prev"><a href="architecture.html">Architecture & Data Flow</a></span>
+ <span class="next"><a href="workflow.html">End-to-End Workflow</a></span>
+</nav>
+
+        </div>
+        <div id="searchbox">
+          <input id="searchinput" type="search" placeholder="Search... (Key: F)" autocomplete="false" size="30" />
+          <ul id="results"></ul>
+        </div>
+    </div>
+    <footer id="site-footer">
+        <div class="left">
+            <p>&nbsp;&nbsp;Copyright &copy; 2026. Product- and customer-neutral edition. All rights reserved.</p>
+        </div>
+        <div class="middle"></div>
+        <div class="right">
+            <p>Compiled by Bento</p>
+            <img src="res/bento.png" />
+        </div>
+    </footer>
+    <script>
+        // The baseLevel is used to assign the search result pages.
+        var baseLevel = "res".replace("res", "");
+    </script>
+    <script src="https://unpkg.com/lunr/lunr.js"></script>
+    <script src="res/index.js"></script>
+    <script src="res/files.js"></script>
+    <script src="res/site.js"></script>
+
+    
+</body>
+</html>

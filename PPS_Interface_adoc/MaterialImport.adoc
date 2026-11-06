@@ -1,0 +1,89 @@
+= Material / Stock Import
+:imagesdir: img
+
+The `StockImp` file keeps raw-sheet stock in the production software aligned with the ERP/PPS system. Two operations are supported.
+
+.The two stock operations and their creation rules.
+image::stock-ops.png["The two stock operations and their creation rules.",760]
+
+== 8.1 Operations & creation rules
+
+=== TotalStock (absolute)
+
+* Provides the complete material inventory (absolute stock) from the ERP/PPS system.
+* *Overwrites* the current sheet quantity in the production software.
+* If the sheet / raw material does not exist, it is *always created* — even when the reported quantity is `0`.
+* In `Material`, material and thickness are separated by “`-`”.
+
+=== InventoryBooking (delta)
+
+* Provides changes to stock; the quantity is *added to / subtracted from* the current sheet quantity.
+* If the sheet does not yet exist:
+** *Positive* quantity → create the sheet and set its quantity.
+** *Negative* quantity → do nothing (no sheet is created).
+
+== 8.2 `StockImp` fields
+
+Entries sit under `<TotalStockData>` (as `<TotalStock>`) or the booking equivalent (as `<InventoryBooking>`). Both carry the same descriptive fields:
+
+[%autowidth.stretch,options="header"]
+|===
+|Element |Meaning |Example
+
+|`IdentNo` (attr) |Identifier of the stock / raw-sheet record. |`STK-0150`
+|`Material` |Raw-material name (material + thickness; for TotalStock, separated by “-”). Used when creating a new raw material. |`STEEL-20`
+|`MaterialDescription` |Human-readable material description. |`Steel 2.0 mm, 1-side foil`
+|`Description` |Sheet comment. |`2500×1250×2.0`
+|`Length` |Sheet length. |`2500`
+|`Width` |Sheet width. |`1250`
+|`Thickness` |Sheet thickness. |`2.00`
+|`UnitOfDimension` |Unit for Length / Width / Thickness (`mm` or `in`). |`mm`
+|`TotalQuantity` / `Quantity` |Absolute quantity (TotalStock) or signed delta (InventoryBooking). |`164.00` / `-3`
+|`StockUnit` |Unit of the quantity (e.g. pieces). |`pcs`
+|`TotalWeight` |Total weight of the stock. |`8544.50`
+|`MinimumUnclaimedQuantity` |Minimum free / unclaimed quantity to keep. |`10`
+|`BasicMaterial` |Base material group. |`steel`
+|`SpecificWeight` |Specific weight (density). |`7.9`
+|`UnitOfSpecificWeight` |Unit of the specific weight. |`kg/dm3`
+|`DirectionOfRolling` |Rolling direction: `1`=horizontal, `2`=vertical, `3`=none. |`2`
+|===
+
+== 8.3 Examples
+
+=== TotalStock
+
+[source,xml]
+----
+<PPSImport Version="1.1">
+ <TotalStockData>
+  <TotalStock IdentNo="STK-0150">
+   <Material>STEEL-20</Material>
+   <Length>2500</Length>
+   <Width>1250</Width>
+   <Thickness>2.00</Thickness>
+   <UnitOfDimension>mm</UnitOfDimension>
+   <TotalQuantity>164</TotalQuantity>
+   <DirectionOfRolling>2</DirectionOfRolling>
+  </TotalStock>
+ </TotalStockData>
+</PPSImport>
+----
+
+=== InventoryBooking
+
+[source,xml]
+----
+<PPSImport Version="1.1">
+ <InventoryBookingData>
+  <InventoryBooking IdentNo="STK-0150">
+   <Material>STEEL-15</Material>
+   <Length>1000</Length>
+   <Width>500</Width>
+   <UnitOfDimension>mm</UnitOfDimension>
+   <Quantity>-3</Quantity>
+   <Description>Raw sheet</Description>
+   <DirectionOfRolling>2</DirectionOfRolling>
+  </InventoryBooking>
+ </InventoryBookingData>
+</PPSImport>
+----

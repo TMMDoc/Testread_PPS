@@ -1,0 +1,24 @@
+= Introduction
+:imagesdir: img
+
+== 1.1 Purpose
+
+The interface exists so that a plant whose ERP system already produces (or consumes) a defined XML interface can exchange production data with the nesting software automatically. It preserves existing automation pipelines and reduces onboarding effort. Its scope covers three capability areas:
+
+* *Master data & order import* — parts and production orders flow from the ERP/PPS system into the production software.
+* *Material synchronization* — raw-sheet stock levels are kept in step with the ERP/PPS system.
+* *Job feedback (export)* — once the programmer nests parts and releases a job to the machine, the resulting layout/job data is written back for the ERP/PPS system to update its own order status.
+
+== 1.2 Design principle: built on spreadsheet import
+
+Rather than a separate subsystem, the import side of the PPS interface *extends the existing spreadsheet-import feature*. Because that importer already understood column-to-field mapping, the PPS interface reuses the same mapping engine and preview UI, and simply adds the ERP file formats on top. As a result, a hierarchical *XML* file and a flat *CSV / XLS / XLSX* file are handled through the same xref:FieldMapping#[field-mapping mechanism].
+
+[NOTE]
+====
+*Terminology.* Throughout the interface, “PPS” is used as a collective term for the exchanged files in any supported format (XML, CSV, XLS, XLSX). A single named *mapping* (also called a “style”) ties the columns/elements of an incoming file to the production software’s own fields.
+====
+
+== 1.3 Licensing & permissions
+
+* The PPS import / mapping capability is *license-restricted* and bundled with the advanced job-management module. On license tiers that do not include it, dropping a `.xls`, `.xlsx` or `.xml` file does *not* open the mapping window; instead a license-validation message is shown and the file is not processed.
+* *Administrator* rights are required to _create or save_ a mapping. Applying an already-saved mapping during a normal import does not require administrator rights.

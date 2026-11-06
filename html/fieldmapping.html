@@ -1,0 +1,374 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@400;600&family=Nunito+Sans:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="res/bento.css">
+  <link rel="stylesheet" href="res/site.css">
+  <link rel="stylesheet" href="res/tree.css">
+  <link rel="stylesheet" href="res/sibling.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" type="image/x-icon" href="img/favicon.png">
+  <title>Field Mapping (Spreadsheet Mapping)</title>
+</head>
+<body id="site-body" onload="sLoaded()">
+    <header id="site-header">
+        <div id="header-logo"><img src="img/logo.png" width="200" height="78" /></div>
+        <div><p>PPS Interface — Technical Manual</p></div>
+    </header>
+    <div id="site-main">
+        <nav id="site-nav">
+            <div class="treesite">
+ <ul>
+  <li><button class="tree blank"></button><a href="index.html">PPS Interface — Technical Manual</a></li>
+  <li><button class="tree blank"></button><a href="introduction.html">Introduction</a></li>
+  <li><button class="tree blank"></button><a href="architecture.html">Architecture & Data Flow</a></li>
+  <li><button class="tree blank"></button><a href="workflow.html">End-to-End Workflow</a></li>
+  <li><button class="tree blank"></button><a href="orderimport.html">Production Order Import</a></li>
+  <li><button class="tree blank"></button><a class="active" href="fieldmapping.html">Field Mapping (Spreadsheet Mapping)</a></li>
+  <li><button class="tree blank"></button><a href="orderupdate.html">Order Update & Cancellation</a></li>
+  <li><button class="tree blank"></button><a href="materialimport.html">Material / Stock Import</a></li>
+  <li><button class="tree blank"></button><a href="jobexport.html">Job Export</a></li>
+  <li><button class="tree blank"></button><a href="productionpackage.html">Production Package</a></li>
+  <li><button class="tree blank"></button><a href="assemblies.html">Assemblies & Collective Orders</a></li>
+  <li>
+   <button class="tree closed"></button>
+   <a href="appendix/index.html">Appendix</a>
+   <ul class="hide">
+    <li><button class="tree blank"></button><a href="appendix/fieldreference.html">Field Reference</a></li>
+    <li><button class="tree blank"></button><a href="appendix/codes.html">Codes</a></li>
+    <li><button class="tree blank"></button><a href="appendix/settings.html">Configuration Settings</a></li>
+    <li><button class="tree blank"></button><a href="appendix/glossary.html">Glossary</a></li>
+   </ul>
+  </li>
+ </ul>
+</div>
+
+        </nav>
+        <div id="site-nav-right">
+            <nav id="site-crumb">
+ <div>
+  <button>
+   <img src="res/home.png">
+  </button>
+ </div>
+ <div>
+  <a href="fieldmapping.html">Field Mapping (Spreadsheet Mapping)</a>
+ </div>
+</nav>
+
+            <div id="site-crumb-below">
+                <div id="site-toc-left">
+                    <article id="article">
+                        <h1>Field Mapping (Spreadsheet Mapping)</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>Because incoming files can differ in structure, the operator defines a <strong>mapping</strong> between the file’s fields and the production software’s own fields, then saves it under a name for reuse.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_6_1_the_spreadsheet_mapping_dialog">6.1 The Spreadsheet Mapping dialog</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>When a supported file (<code>.csv</code>, <code>.xls</code>, <code>.xlsx</code>, <code>.xml</code>) is imported for the first time, the Spreadsheet Mapping window opens. It has two main panes: a <strong>PPS-fields</strong> pane listing the fields found in the incoming file (each with a checkbox), and a <strong>spreadsheet / preview</strong> pane showing the selected fields mapped to the software’s fields.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/mapping-dialog.png" alt="The Spreadsheet Mapping dialog (illustrative). Check the PPS fields to include, map each software field to a PPS field, name the mapping and save it." width="760">
+</div>
+<div class="title">Figure 1. The Spreadsheet Mapping dialog (illustrative). Check the PPS fields to include, map each software field to a PPS field, name the mapping and save it.</div>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/shot_mapping.png" alt="The Spreadsheet Mapping window: software fields (left), the PPS-field tree with checkboxes (centre), and the spreadsheet preview with the live mapping preview (right). Illustrative screenshot; identifying names and paths removed." width="760">
+</div>
+<div class="title">Figure 2. The Spreadsheet Mapping window: software fields (left), the PPS-field tree with checkboxes (centre), and the spreadsheet preview with the live mapping preview (right). Illustrative screenshot; identifying names and paths removed.</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_6_2_internal_target_fields">6.2 Internal target fields</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The software’s own importable fields — the left column of the mapping — are:</p>
+</div>
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Software field</th>
+<th class="tableblock halign-left valign-top">Type</th>
+<th class="tableblock halign-left valign-top">Required?</th>
+<th class="tableblock halign-left valign-top">Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Part name</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Also used to locate the CAD file.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Quantity</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Order / assembly quantity.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Material</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Required</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Part material or raw-material name. If a raw-material name is mapped, the separate Thickness mapping is ignored.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Thickness</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Number</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Needed only when Material holds a material name (not a raw-material name).</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Due date</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">DateTime</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Defaults to <strong>today + 3 days</strong> when absent. Ignored for parts/assemblies.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Priority</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">One of Low, Normal, High, Urgent.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Part Order</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Text</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Optional</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">ERP order number. If unmapped/empty, an internal part-order number is generated.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_6_3_creating_saving_and_reusing_a_mapping">6.3 Creating, saving and reusing a mapping</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Drop the file into the application. The mapping dialog opens with all PPS fields preselected and a live preview.</p>
+</li>
+<li>
+<p>Use the PPS-field checkboxes (or the <strong>All</strong> toggle) to select the fields you need. The preview updates as you toggle.</p>
+</li>
+<li>
+<p>Map a software field to a PPS field (select the software field, then its corresponding PPS field — or drag the PPS field onto it). Double-click a mapped software field to remove the mapping.</p>
+</li>
+<li>
+<p>Enter a <strong>Name</strong> and click <strong>Save</strong>. The mapping is stored in the shared repository and synchronized to all workstations.</p>
+</li>
+<li>
+<p>The mapped values populate the <strong>New Job</strong> dialog; confirm to import as a job. Alternatively use the open → import-orders command to import as orders instead of a job.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Reuse &amp; edit.</strong> On later imports of a similar file the saved mapping is applied automatically and the dialog does not reappear. To edit a saved mapping, hold <strong>Ctrl</strong> while dropping the file to reopen it. Do not click <strong>Cancel</strong> after editing — cancelling discards the changes.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/shot_newjob.png" alt="Imported orders shown in the New Job dialog (left) and as a job tile (right), populated from the mapped columns — quantity, due date, material and part order." width="760">
+</div>
+<div class="title">Figure 3. Imported orders shown in the New Job dialog (left) and as a job tile (right), populated from the mapped columns — quantity, due date, material and part order.</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_6_4_parent_child_fields_and_prefixing">6.4 Parent / child fields and prefixing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>PPS fields form a hierarchy (e.g. a parent <code>ProductionOrders</code> or <code>Parts</code> containing child attributes). Because the same child name can appear under different parents, each child is shown <strong>prefixed with its parent</strong> in the spreadsheet pane — e.g. <code>ProductionOrders.CustomerNo</code> — to remove ambiguity. Unchecking a parent cascades to its children, and the <strong>All</strong> option toggles the whole tree. The checked/unchecked state of each field is persisted when the mapping is reopened.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_6_5_unmapped_fields_extra_fields">6.5 Unmapped fields → Extra Fields</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Fields that are selected but not mapped to a software field can still be imported as <strong>Extra Fields</strong> (formerly “External Fields”) when the option <strong>“Export the selected unmapped PPS fields as extended properties”</strong> is enabled. These are stateless pass-through values — carried through and shown on the Job-item and Part detail pages, and usable for filtering — but they are not treated as part of a part’s identity. If the option is off, unmapped fields do <strong>not</strong> appear in Extra Fields.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_6_6_cad_drawing_resolution">6.6 CAD / drawing resolution</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>During import the software also uploads the referenced part. It finds the CAD file by:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Looking in the <strong>same directory as the import file</strong>, matched on the Part-name field; then</p>
+</li>
+<li>
+<p>Searching the configured <strong>CAD lookup directories</strong> (<em>Factory → Settings → Job → Spreadsheet-import settings</em>). Several directories may be listed, and a recursive sub-directory search can be enabled.</p>
+</li>
+</ol>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/shot_settings.png" alt="Spreadsheet-import settings: the CAD lookup directory, recursive search, and the import options (create blank part for missing CAD, prefer raw-material column)." width="760">
+</div>
+<div class="title">Figure 4. Spreadsheet-import settings: the CAD lookup directory, recursive search, and the import options (create blank part for missing CAD, prefer raw-material column).</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_6_7_format_differences">6.7 Format differences</h2>
+<div class="sectionbody">
+<table class="tableblock frame-all grid-all fit-content stretch">
+<colgroup>
+<col>
+<col>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Aspect</th>
+<th class="tableblock halign-left valign-top">XML</th>
+<th class="tableblock halign-left valign-top">CSV</th>
+<th class="tableblock halign-left valign-top">XLS / XLSX</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Shape</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Hierarchical; flattened to an intermediate CSV for mapping</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flat, delimited</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Flat, tabular</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Duplicate columns</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rejected with an error</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Should be rejected the same way</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Parent/child prefixing</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Yes (from element nesting)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">n/a</p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<img src="img/shot_formats.png" alt="A separate mapping style can be stored per file type (CSVConfig, XLSConfig, XLSXConfig, XMLConfig). Each style lists its mapped software fields and any external fields. Callouts: ② pick the style, ④ mapped fields, ⑤ external fields." width="760">
+</div>
+<div class="title">Figure 5. A separate mapping style can be stored per file type (CSVConfig, XLSConfig, XLSXConfig, XMLConfig). Each style lists its mapped software fields and any external fields. Callouts: ② pick the style, ④ mapped fields, ⑤ external fields.</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_6_8_managing_saved_mappings">6.8 Managing saved mappings</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Saved mappings (“styles”) are managed under <strong>Factory → Settings → Job → Spreadsheet-import settings → Spreadsheet mappings</strong>. There the operator can view the stored styles and the fields each one contains, and delete obsolete ones (deletion is confirmed via a warning). Typical examples: a style <code>Default-MatThk</code> (Part name · Qty · Priority · Customer · Material · Thickness) and a shorter <code>Default-Mat</code> (without Thickness).</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/shot_manage.png" alt="Managing saved mappings: the stored configurations (left), their field mapping, and the Extra Fields carried through from the import (right)." width="760">
+</div>
+<div class="title">Figure 6. Managing saved mappings: the stored configurations (left), their field mapping, and the Extra Fields carried through from the import (right).</div>
+</div>
+</div>
+</div>
+
+                    </article>
+                </div>
+                <div id="site-toc-holder">
+                    <aside id="site-toc">
+ <h3>Contents</h3>
+ <ul>
+  <li level="1">
+   <a href="#_6_1_the_spreadsheet_mapping_dialog">6.1 The Spreadsheet Mapping dialog</a>
+  </li>
+  <li level="1">
+   <a href="#_6_2_internal_target_fields">6.2 Internal target fields</a>
+  </li>
+  <li level="1">
+   <a href="#_6_3_creating_saving_and_reusing_a_mapping">6.3 Creating, saving and reusing a mapping</a>
+  </li>
+  <li level="1">
+   <a href="#_6_4_parent_child_fields_and_prefixing">6.4 Parent / child fields and prefixing</a>
+  </li>
+  <li level="1">
+   <a href="#_6_5_unmapped_fields_extra_fields">6.5 Unmapped fields → Extra Fields</a>
+  </li>
+  <li level="1">
+   <a href="#_6_6_cad_drawing_resolution">6.6 CAD / drawing resolution</a>
+  </li>
+  <li level="1">
+   <a href="#_6_7_format_differences">6.7 Format differences</a>
+  </li>
+  <li level="1">
+   <a href="#_6_8_managing_saved_mappings">6.8 Managing saved mappings</a>
+  </li>
+ </ul>
+</aside>
+
+                </div>
+            </div>
+            <nav class="pagination">
+ <span class="prev"><a href="orderimport.html">Production Order Import</a></span>
+ <span class="next"><a href="orderupdate.html">Order Update & Cancellation</a></span>
+</nav>
+
+        </div>
+        <div id="searchbox">
+          <input id="searchinput" type="search" placeholder="Search... (Key: F)" autocomplete="false" size="30" />
+          <ul id="results"></ul>
+        </div>
+    </div>
+    <footer id="site-footer">
+        <div class="left">
+            <p>&nbsp;&nbsp;Copyright &copy; 2026. Product- and customer-neutral edition. All rights reserved.</p>
+        </div>
+        <div class="middle"></div>
+        <div class="right">
+            <p>Compiled by Bento</p>
+            <img src="res/bento.png" />
+        </div>
+    </footer>
+    <script>
+        // The baseLevel is used to assign the search result pages.
+        var baseLevel = "res".replace("res", "");
+    </script>
+    <script src="https://unpkg.com/lunr/lunr.js"></script>
+    <script src="res/index.js"></script>
+    <script src="res/files.js"></script>
+    <script src="res/site.js"></script>
+
+    
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Condensed:wght@400;600&family=Nunito+Sans:ital,wght@0,400;0,600;1,400;1,600&family=Roboto+Mono:ital,wght@0,400;0,600;1,400;1,600&display=block" rel="stylesheet">
+  <link rel="stylesheet" href="res/bento.css">
+  <link rel="stylesheet" href="res/site.css">
+  <link rel="stylesheet" href="res/tree.css">
+  <link rel="stylesheet" href="res/sibling.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="icon" type="image/x-icon" href="img/favicon.png">
+  <title>End-to-End Workflow</title>
+</head>
+<body id="site-body" onload="sLoaded()">
+    <header id="site-header">
+        <div id="header-logo"><img src="img/logo.png" width="200" height="78" /></div>
+        <div><p>PPS Interface — Technical Manual</p></div>
+    </header>
+    <div id="site-main">
+        <nav id="site-nav">
+            <div class="treesite">
+ <ul>
+  <li><button class="tree blank"></button><a href="index.html">PPS Interface — Technical Manual</a></li>
+  <li><button class="tree blank"></button><a href="introduction.html">Introduction</a></li>
+  <li><button class="tree blank"></button><a href="architecture.html">Architecture & Data Flow</a></li>
+  <li><button class="tree blank"></button><a class="active" href="workflow.html">End-to-End Workflow</a></li>
+  <li><button class="tree blank"></button><a href="orderimport.html">Production Order Import</a></li>
+  <li><button class="tree blank"></button><a href="fieldmapping.html">Field Mapping (Spreadsheet Mapping)</a></li>
+  <li><button class="tree blank"></button><a href="orderupdate.html">Order Update & Cancellation</a></li>
+  <li><button class="tree blank"></button><a href="materialimport.html">Material / Stock Import</a></li>
+  <li><button class="tree blank"></button><a href="jobexport.html">Job Export</a></li>
+  <li><button class="tree blank"></button><a href="productionpackage.html">Production Package</a></li>
+  <li><button class="tree blank"></button><a href="assemblies.html">Assemblies & Collective Orders</a></li>
+  <li>
+   <button class="tree closed"></button>
+   <a href="appendix/index.html">Appendix</a>
+   <ul class="hide">
+    <li><button class="tree blank"></button><a href="appendix/fieldreference.html">Field Reference</a></li>
+    <li><button class="tree blank"></button><a href="appendix/codes.html">Codes</a></li>
+    <li><button class="tree blank"></button><a href="appendix/settings.html">Configuration Settings</a></li>
+    <li><button class="tree blank"></button><a href="appendix/glossary.html">Glossary</a></li>
+   </ul>
+  </li>
+ </ul>
+</div>
+
+        </nav>
+        <div id="site-nav-right">
+            <nav id="site-crumb">
+ <div>
+  <button>
+   <img src="res/home.png">
+  </button>
+ </div>
+ <div>
+  <a href="workflow.html">End-to-End Workflow</a>
+ </div>
+</nav>
+
+            <div id="site-crumb-below">
+                <div id="site-toc-left">
+                    <article id="article">
+                        <h1>End-to-End Workflow</h1>
+<div id="preamble">
+<div class="sectionbody">
+<div class="paragraph">
+<p>A typical production cycle moves an order from the ERP/PPS system, through nesting and NC generation in the production software, and back to the ERP/PPS system as job feedback.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="img/workflow.png" alt="The round-trip: order selection → import → nesting → NC release → job export → ERP status update." width="760">
+</div>
+<div class="title">Figure 1. The round-trip: order selection → import → nesting → NC release → job export → ERP status update.</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_4_1_the_cycle_step_by_step">4.1 The cycle, step by step</h2>
+<div class="sectionbody">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p><strong>Order selection (ERP).</strong> The planner selects the orders to produce — typically by target/due date, possibly spanning several end customers — and the ERP writes a <code>ProdOrderImp*.xml</code> into the import directory. Files are usually timestamp-prefixed, e.g. <code>2026.01.15_09.12.03_ProdOrderImp1000200.xml</code>.</p>
+</li>
+<li>
+<p><strong>Import &amp; mapping.</strong> The production software imports the file. On the first import of a new layout, the <a href="fieldmapping.html">Spreadsheet Mapping</a> dialog opens so the operator can map fields; thereafter a saved mapping is reused automatically.</p>
+</li>
+<li>
+<p><strong>Grouping into a job.</strong> Imported orders carry a job / collective-order number in the <code>Assembly</code> field, which is used to group them and to set the job number. The operator opens or creates that job and adds the orders.</p>
+</li>
+<li>
+<p><strong>Nesting.</strong> Parts are nested onto sheets automatically or manually. Additional “filler” parts can be added (via a further <code>ProdOrderImp</code>), and a <em>partial nest</em> of an order is possible. The cut program is reviewed and adjusted.</p>
+</li>
+<li>
+<p><strong>NC &amp; release.</strong> NC code is generated and the job’s layouts are released to the machine. At release the full <a href="productionpackage.html">production package</a> and setup documents are published.</p>
+</li>
+<li>
+<p><strong>Job export.</strong> A <code>JobExp*.xml</code> is written to the PPS output directory describing the released sheets and the parts nested on them.</p>
+</li>
+<li>
+<p><strong>ERP update.</strong> The ERP/PPS system reads the feedback file and updates its own order status. The used sheet can be matched automatically to the ERP’s sheet record using sheet size plus the external sheet name.</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+<div class="paragraph">
+<p><strong>Housekeeping.</strong> Orders that were never placed into a job can later be deleted again through the interface (see <a href="orderupdate.html">§7</a>). Once an order is part of a job, it can no longer be removed via the interface and must be handled inside the production software.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+
+                    </article>
+                </div>
+                <div id="site-toc-holder">
+                    <aside id="site-toc">
+ <h3>Contents</h3>
+ <ul>
+  <li level="1">
+   <a href="#_4_1_the_cycle_step_by_step">4.1 The cycle, step by step</a>
+  </li>
+ </ul>
+</aside>
+
+                </div>
+            </div>
+            <nav class="pagination">
+ <span class="prev"><a href="architecture.html">Architecture & Data Flow</a></span>
+ <span class="next"><a href="orderimport.html">Production Order Import</a></span>
+</nav>
+
+        </div>
+        <div id="searchbox">
+          <input id="searchinput" type="search" placeholder="Search... (Key: F)" autocomplete="false" size="30" />
+          <ul id="results"></ul>
+        </div>
+    </div>
+    <footer id="site-footer">
+        <div class="left">
+            <p>&nbsp;&nbsp;Copyright &copy; 2026. Product- and customer-neutral edition. All rights reserved.</p>
+        </div>
+        <div class="middle"></div>
+        <div class="right">
+            <p>Compiled by Bento</p>
+            <img src="res/bento.png" />
+        </div>
+    </footer>
+    <script>
+        // The baseLevel is used to assign the search result pages.
+        var baseLevel = "res".replace("res", "");
+    </script>
+    <script src="https://unpkg.com/lunr/lunr.js"></script>
+    <script src="res/index.js"></script>
+    <script src="res/files.js"></script>
+    <script src="res/site.js"></script>
+
+    
+</body>
+</html>
